@@ -1,0 +1,386 @@
+@import './_variables';
+@import "./_mixins";
+@import "./_main";
+@import "./_topbar";
+@import "./_menu";
+@import "./_config";
+@import "./_content";
+@import "./_footer";
+@import "./_responsive";
+@import "./_utils";
+@import "./_typography";
+
+
+// New Layout SCSS - Sidebar on left, Topbar on right (above content)
+
+.layout-wrapper {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+}
+
+// ============================================
+// SIDEBAR - Left Side (Fixed)
+// ============================================
+
+.layout-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: var(--surface-overlay);
+    border-right: 1px solid var(--surface-border);
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s, left 0.3s;
+    z-index: 999;
+    overflow: hidden;
+
+    .layout-sidebar-logo {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        border-bottom: 1px solid var(--surface-border);
+        flex-shrink: 0;
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1.25rem;
+            transition: opacity 0.3s;
+
+            &:hover {
+                opacity: 0.8;
+            }
+
+            img {
+                flex-shrink: 0;
+            }
+
+            .logo-text {
+                white-space: nowrap;
+                transition: opacity 0.3s;
+            }
+        }
+    }
+
+    .layout-sidebar-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 1rem 0;
+    }
+}
+
+// Collapsed Sidebar
+.layout-sidebar-collapsed {
+    .layout-sidebar {
+        width: 70px;
+
+        .layout-sidebar-logo {
+            justify-content: center;
+            padding: 0 1rem;
+
+            .logo-link {
+                justify-content: center;
+
+                .logo-text {
+                    opacity: 0;
+                    width: 0;
+                    overflow: hidden;
+                }
+            }
+        }
+
+        // Menu items will be icon-only
+        .layout-menu {
+            .layout-menuitem-text {
+                opacity: 0;
+                width: 0;
+                overflow: hidden;
+            }
+
+            .layout-root-menuitem > .layout-menuitem-root-text {
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+            }
+        }
+    }
+
+    .layout-main-wrapper {
+        margin-left: 70px;
+    }
+}
+
+// ============================================
+// MAIN WRAPPER - Right Side (Scrollable)
+// ============================================
+
+.layout-main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 280px;
+    transition: margin-left 0.3s;
+    min-height: 100vh;
+}
+
+// ============================================
+// TOPBAR - Top of content area (not full width)
+// ============================================
+
+.layout-topbar {
+    height: 70px;
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--surface-border);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 998;
+    flex-shrink: 0;
+
+    .layout-menu-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: var(--surface-hover);
+        }
+
+        i {
+            font-size: 1.25rem;
+        }
+    }
+
+    .layout-topbar-spacer {
+        flex: 1;
+    }
+
+    .layout-topbar-menu-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+
+        &:hover {
+            background-color: var(--surface-hover);
+        }
+    }
+
+    .layout-topbar-menu {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .layout-topbar-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.2s;
+            white-space: nowrap;
+
+            &:hover {
+                background-color: var(--surface-hover);
+            }
+
+            i {
+                font-size: 1.125rem;
+            }
+
+            span {
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+// ============================================
+// MAIN CONTENT AREA
+// ============================================
+
+.layout-main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+
+    .layout-main {
+        flex: 1;
+    }
+}
+
+// ============================================
+// RESPONSIVE - Mobile
+// ============================================
+
+@media (max-width: 991px) {
+    .layout-sidebar {
+        left: -280px;
+    }
+
+    .layout-main-wrapper {
+        margin-left: 0;
+    }
+
+    .layout-sidebar-active {
+        .layout-sidebar {
+            left: 0;
+        }
+
+        .layout-mask {
+            display: block;
+        }
+    }
+
+    .layout-topbar {
+        .layout-topbar-menu {
+            position: fixed;
+            right: 0;
+            top: 70px;
+            width: 100%;
+            max-width: 300px;
+            background: var(--surface-overlay);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            flex-direction: column;
+            align-items: stretch;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: none;
+
+            &.layout-topbar-menu-mobile-active {
+                display: flex;
+            }
+
+            .layout-topbar-button {
+                justify-content: flex-start;
+            }
+        }
+    }
+}
+
+// ============================================
+// OVERLAY MASK (for mobile sidebar)
+// ============================================
+
+.layout-mask {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 998;
+}
+
+// ============================================
+// APP CONFIG (settings panel)
+// ============================================
+
+.layout-config {
+    position: fixed;
+    right: -25rem;
+    top: 0;
+    width: 25rem;
+    height: 100vh;
+    background: var(--surface-overlay);
+    border-left: 1px solid var(--surface-border);
+    transition: right 0.3s;
+    z-index: 1000;
+    padding: 2rem;
+    overflow-y: auto;
+
+    &.layout-config-active {
+        right: 0;
+    }
+}
+
+// ============================================
+// SCROLL BLOCKING (for mobile menu)
+// ============================================
+
+body.blocked-scroll {
+    overflow: hidden;
+}
+
+// ============================================
+// MENU STYLING (for collapsed state)
+// ============================================
+
+.layout-menu {
+    .layout-menuitem {
+        .layout-menuitem-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            transition: all 0.2s;
+            color: var(--text-color);
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--surface-hover);
+            }
+
+            .layout-menuitem-icon {
+                font-size: 1.125rem;
+                flex-shrink: 0;
+            }
+
+            .layout-menuitem-text {
+                flex: 1;
+                transition: opacity 0.3s, width 0.3s;
+            }
+        }
+
+        &.active-menuitem > .layout-menuitem-content {
+            background-color: var(--primary-color);
+            color: var(--primary-color-text);
+        }
+    }
+
+    .layout-root-menuitem {
+        .layout-menuitem-root-text {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-color-secondary);
+            transition: opacity 0.3s, height 0.3s;
+        }
+    }
+}
+
+// Collapsed sidebar menu adjustments
+.layout-sidebar-collapsed {
+    .layout-menu {
+        .layout-menuitem {
+            .layout-menuitem-content {
+                justify-content: center;
+                padding: 0.75rem 1rem;
+            }
+        }
+    }
+}
